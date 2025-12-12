@@ -21,7 +21,7 @@ import {
 const Logo = () => (
   <Link href="/" className="flex items-center gap-2">
     <Code2 className="h-6 w-6 text-primary" />
-    <span className="font-semibold text-lg shrink-0">DevLearn</span>
+    <span className="font-semibold text-lg shrink-0">EduLabs</span>
   </Link>
 );
 
