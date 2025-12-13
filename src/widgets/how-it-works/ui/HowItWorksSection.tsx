@@ -1,47 +1,52 @@
 import { BookOpen, Zap, TrendingUp } from "lucide-react";
 
+/**
+ * Секція, що пояснює принцип роботи платформи у трьох кроках.
+ */
 export default function HowItWorksSection() {
   return (
-    <section className="py-16 lg:py-24 bg-[#1E1F29]">
+    <section className="bg-sidebar py-16 lg:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center text-[#F8F8F2] mb-12">
+        <h2 className="mb-12 text-center text-3xl font-bold text-sidebar-foreground">
           Як це працює
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {/* Крок 1 */}
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full bg-[#8BE9FD]/10 border-2 border-[#8BE9FD] flex items-center justify-center">
-              <BookOpen className="w-8 h-8 text-[#8BE9FD]" />
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
+          {/* Крок 1: Вибір курсу */}
+          <div className="space-y-4 text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary bg-primary/10">
+              <BookOpen className="h-8 w-8 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold text-[#F8F8F2]">Обери курс</h3>
-            <p className="text-[#6272A4]">
+            <h3 className="text-xl font-semibold text-sidebar-foreground">
+              Обери курс
+            </h3>
+            <p className="text-muted-foreground">
               Вибери курс що відповідає твоєму рівню та інтересам
             </p>
           </div>
 
-          {/* Крок 2 */}
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full bg-[#BD93F9]/10 border-2 border-[#BD93F9] flex items-center justify-center">
-              <Zap className="w-8 h-8 text-[#BD93F9]" />
+          {/* Крок 2: Навчання */}
+          <div className="space-y-4 text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-2 border-purple bg-purple/10">
+              <Zap className="h-8 w-8 text-purple" />
             </div>
-            <h3 className="text-xl font-semibold text-[#F8F8F2]">
+            <h3 className="text-xl font-semibold text-sidebar-foreground">
               Вчись у своєму темпі
             </h3>
-            <p className="text-[#6272A4]">
+            <p className="text-muted-foreground">
               Проходь уроки коли зручно. Все завжди доступно онлайн
             </p>
           </div>
 
-          {/* Крок 3 */}
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 mx-auto rounded-full bg-[#50FA7B]/10 border-2 border-[#50FA7B] flex items-center justify-center">
-              <TrendingUp className="w-8 h-8 text-[#50FA7B]" />
+          {/* Крок 3: Прогрес */}
+          <div className="space-y-4 text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border-2 border-success bg-success/10">
+              <TrendingUp className="h-8 w-8 text-success" />
             </div>
-            <h3 className="text-xl font-semibold text-[#F8F8F2]">
+            <h3 className="text-xl font-semibold text-sidebar-foreground">
               Відслідковуй прогрес
             </h3>
-            <p className="text-[#6272A4]">
+            <p className="text-muted-foreground">
               Заробляй XP, підвищуй рівень та отримуй досягнення
             </p>
           </div>

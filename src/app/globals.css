@@ -37,6 +37,14 @@
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
     --color-card: var(--card);
+
+    /* Gamification and status colors */
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-purple: var(--purple);
+    --color-pink: var(--pink);
+    --color-pink-foreground: var(--pink-foreground);
+
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
@@ -70,6 +78,13 @@
 
     --destructive: oklch(0.781 0.2 331.54); /* #FF79C6 */
     --destructive-foreground: oklch(0.249 0.023 265.52); /* #282A36 */
+
+    /* Gamification and status colors */
+    --success: oklch(0.91 0.22 150); /* #50FA7B */
+    --success-foreground: oklch(0.249 0.023 265.52); /* #282A36 */
+    --purple: oklch(0.76 0.17 283); /* #BD93F9 */
+    --pink: oklch(0.781 0.2 331.54); /* #FF79C6 */
+    --pink-foreground: oklch(0.249 0.023 265.52); /* #282A36 */
 
     --border: oklch(0.3525 0.025 261.21); /* #44475A */
     --input: oklch(0.3525 0.025 261.21); /* #44475A */
@@ -112,4 +127,3 @@
     --sidebar-border: hsl(240 3.7% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
-

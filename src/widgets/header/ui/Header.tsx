@@ -16,28 +16,34 @@ import {
   SheetTrigger,
 } from "@/shared/ui/sheet";
 
-// Компонент для логотипу, назва тепер видима на всіх екранах
+/**
+ * Компонент логотипу сайту.
+ */
 const Logo = () => (
   <Link href="/" className="flex items-center gap-2">
     <Code2 className="h-6 w-6 text-primary" />
-    <span className="font-semibold text-lg shrink-0">EduLabs</span>
+    <span className="shrink-0 font-semibold text-lg">EduLabs</span>
   </Link>
 );
 
-// Компонент для навігаційних посилань
+/**
+ * Компонент навігаційних посилань для десктопної версії.
+ */
 const NavLinks = () => (
-  <nav className="hidden md:flex items-center gap-4">
+  <nav className="hidden items-center gap-4 md:flex">
     <Link
       href="/courses"
-      className="text-sm font-medium text-gray-400 hover:text-primary transition-colors"
+      className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
     >
       Курси
     </Link>
-    {/* Додайте інші посилання тут, якщо потрібно */}
+    {/* Тут можна додати інші посилання в майбутньому */}
   </nav>
 );
 
-// Мобільна навігація всередині Sheet
+/**
+ * Компонент мобільної навігації, що з'являється у бічній панелі (Sheet).
+ */
 const MobileNav = () => (
   <Sheet>
     <SheetTrigger asChild>
@@ -62,50 +68,55 @@ const MobileNav = () => (
         <nav className="flex flex-col gap-2">
           <Link
             href="/courses"
-            className="flex items-center gap-3 rounded-lg p-3 text-lg font-medium hover:bg-secondary transition-colors"
+            className="flex items-center gap-3 rounded-lg p-3 text-lg font-medium transition-colors hover:bg-secondary"
           >
             <LayoutGrid className="h-6 w-6 text-primary" />
             <span>Курси</span>
           </Link>
-          {/* Посилання на профіль видалено, бо воно є в кнопці аватара */}
         </nav>
       </div>
     </SheetContent>
   </Sheet>
 );
 
+/**
+ * Головний компонент хедера сайту.
+ * Включає логотип, навігацію, пошук та кнопку профілю.
+ * Має анімацію приховування при скролі на мобільних пристроях.
+ */
 export function Header() {
   const scrollDir = useScrollDirection(50);
 
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 h-14 md:h-16 bg-sidebar border-b border-border shadow-md transition-transform duration-500",
-        // Ховаємо хедер на мобілці при скролі вниз
+        "fixed left-0 right-0 top-0 z-50 h-14 border-b border-border bg-sidebar shadow-md transition-transform duration-500 md:h-16",
+        // Ховаємо хедер на мобільних пристроях при скролі вниз
         scrollDir === "down"
           ? "-translate-y-full md:translate-y-0"
           : "translate-y-0",
       )}
     >
-      <div className="container mx-auto flex h-full items-center justify-between gap-4 px-4 md:px-20 relative">
-        {/* --- Ліва частина --- */}
+      {/* Контейнер, що обмежує ширину контенту та центрує його */}
+      <div className="container relative mx-auto flex h-full items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        {/* --- Ліва частина хедера --- */}
         <div className="flex items-center gap-4">
           <MobileNav />
-          <div className="hidden md:flex shrink-0">
+          <div className="hidden shrink-0 md:flex">
             <Logo />
           </div>
           <NavLinks />
         </div>
 
-        {/* --- Центральна частина (Лого на мобілці) --- */}
+        {/* --- Центральна частина (Логотип на мобільних) --- */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:hidden">
           <Logo />
         </div>
 
-        {/* --- Права частина --- */}
+        {/* --- Права частина хедера --- */}
         <div className="flex items-center gap-2">
-          <div className="relative hidden md:block w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <div className="relative hidden w-80 md:block">
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
               placeholder="Шукайте курси, уроки..."

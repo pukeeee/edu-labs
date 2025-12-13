@@ -5,14 +5,30 @@ import { CourseCard } from "@/entities/course/ui/CourseCard";
 import { FilterBar } from "./FilterBar";
 import type { Course, Level, Category } from "@/shared/types/common";
 
+/**
+ * @property courses - Масив об'єктів курсів для відображення.
+ * @property userProgress - Об'єкт, що містить прогрес користувача по курсах.
+ * @returns {JSX.Element} - Компонент, що відображає каталог курсів з можливістю фільтрації.
+ */
 interface CourseCatalogProps {
   courses: Course[];
   userProgress?: Record<string, { progress: number; completedLessons: number }>;
 }
 
+/**
+ * Компонент CourseCatalog відповідає за відображення списку курсів,
+ * їх фільтрацію та пошук. Він використовує FilterBar для налаштування
+ * критеріїв фільтрації та CourseCard для відображення кожного окремого курсу.
+ */
 export function CourseCatalog({ courses, userProgress }: CourseCatalogProps) {
+  // Стан для зберігання відфільтрованого списку курсів.
   const [filteredCourses, setFilteredCourses] = useState(courses);
 
+  /**
+   * Обробляє зміни фільтрів, що надходять від компонента FilterBar.
+   * Фільтрує курси за рівнем, категорією та пошуковим запитом.
+   * @param filters - Об'єкт з поточними налаштуваннями фільтрів.
+   */
   const handleFilterChange = (filters: {
     level: Level | "all";
     category: Category | "all";
@@ -20,17 +36,17 @@ export function CourseCatalog({ courses, userProgress }: CourseCatalogProps) {
   }) => {
     let filtered = courses;
 
-    // Фільтр по рівню
+    // Фільтрація за рівнем складності
     if (filters.level !== "all") {
       filtered = filtered.filter((c) => c.level === filters.level);
     }
 
-    // Фільтр по категорії
+    // Фільтрація за категорією
     if (filters.category !== "all") {
       filtered = filtered.filter((c) => c.category === filters.category);
     }
 
-    // Пошук
+    // Пошук за назвою, описом та тегами
     if (filters.search) {
       const query = filters.search.toLowerCase();
       filtered = filtered.filter(
@@ -46,12 +62,12 @@ export function CourseCatalog({ courses, userProgress }: CourseCatalogProps) {
 
   return (
     <div className="space-y-8">
-      {/* Фільтри */}
+      {/* Компонент з елементами керування фільтрацією */}
       <FilterBar onFilterChange={handleFilterChange} />
 
-      {/* Сітка курсів */}
+      {/* Умовний рендеринг: сітка курсів або повідомлення про їх відсутність */}
       {filteredCourses.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredCourses.map((course) => (
             <CourseCard
               key={course.id}
@@ -62,8 +78,8 @@ export function CourseCatalog({ courses, userProgress }: CourseCatalogProps) {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12">
-          <p className="text-[#6272A4] text-lg">
+        <div className="py-12 text-center">
+          <p className="text-lg text-muted-foreground">
             Курси не знайдено. Спробуйте інші фільтри.
           </p>
         </div>

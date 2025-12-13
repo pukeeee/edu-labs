@@ -3,35 +3,43 @@ import { Github, Linkedin } from "lucide-react";
 
 import { siteConfig } from "@/shared/config/site";
 
+/**
+ * Компонент футера (підвалу) сайту.
+ * Відображає назву проєкту, навігаційні посилання, категорії,
+ * посилання на соціальні мережі та копірайт.
+ * @returns {JSX.Element} - Компонент футера.
+ */
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-[#44475A] bg-[#1E1F29] mt-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="mt-20 border-t border-sidebar-border bg-sidebar">
+      <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="flex">
           <div className="grid grid-cols-2 gap-8 text-center sm:grid-cols-4 sm:text-left">
-            {/* Про проєкт */}
+            {/* Блок "Про проєкт" */}
             <div className="col-span-2 space-y-4 sm:col-span-1">
-              <h3 className="text-lg font-bold text-[#F8F8F2]">
+              <h3 className="text-lg font-bold text-sidebar-foreground">
                 {siteConfig.name}
               </h3>
-              <p className="text-sm text-[#6272A4]">{siteConfig.description}</p>
+              <p className="text-sm text-muted-foreground">
+                {siteConfig.description}
+              </p>
             </div>
 
-            {/* Wrapper for the other 3 columns */}
+            {/* Обгортка для інших колонок для кращої адаптивності */}
             <div className="col-span-2 sm:col-span-3 sm:contents">
               <div className="flex flex-wrap justify-center gap-8 sm:contents">
-                {/* Навігація */}
+                {/* Навігаційні посилання */}
                 <div className="min-w-38">
-                  <h4 className="text-sm font-semibold text-[#F8F8F2] mb-4">
+                  <h4 className="mb-4 text-sm font-semibold text-sidebar-foreground">
                     Навігація
                   </h4>
                   <ul className="space-y-2 text-sm">
                     <li>
                       <Link
                         href="/"
-                        className="text-[#6272A4] hover:text-[#8BE9FD] transition-colors"
+                        className="text-muted-foreground transition-colors hover:text-primary"
                       >
                         Головна
                       </Link>
@@ -39,7 +47,7 @@ export function Footer() {
                     <li>
                       <Link
                         href="/courses"
-                        className="text-[#6272A4] hover:text-[#8BE9FD] transition-colors"
+                        className="text-muted-foreground transition-colors hover:text-primary"
                       >
                         Курси
                       </Link>
@@ -47,7 +55,7 @@ export function Footer() {
                     <li>
                       <Link
                         href="/profile"
-                        className="text-[#6272A4] hover:text-[#8BE9FD] transition-colors"
+                        className="text-muted-foreground transition-colors hover:text-primary"
                       >
                         Профіль
                       </Link>
@@ -55,16 +63,16 @@ export function Footer() {
                   </ul>
                 </div>
 
-                {/* Категорії */}
+                {/* Посилання на категорії */}
                 <div className="min-w-38">
-                  <h4 className="text-sm font-semibold text-[#F8F8F2] mb-4">
+                  <h4 className="mb-4 text-sm font-semibold text-sidebar-foreground">
                     Категорії
                   </h4>
                   <ul className="space-y-2 text-sm">
                     <li>
                       <Link
                         href="/courses?category=qa"
-                        className="text-[#6272A4] hover:text-[#8BE9FD] transition-colors"
+                        className="text-muted-foreground transition-colors hover:text-primary"
                       >
                         QA Testing
                       </Link>
@@ -72,7 +80,7 @@ export function Footer() {
                     <li>
                       <Link
                         href="/courses?category=ai"
-                        className="text-[#6272A4] hover:text-[#8BE9FD] transition-colors"
+                        className="text-muted-foreground transition-colors hover:text-primary"
                       >
                         AI & ML
                       </Link>
@@ -80,7 +88,7 @@ export function Footer() {
                     <li>
                       <Link
                         href="/courses?category=fullstack"
-                        className="text-[#6272A4] hover:text-[#8BE9FD] transition-colors"
+                        className="text-muted-foreground transition-colors hover:text-primary"
                       >
                         Fullstack
                       </Link>
@@ -88,9 +96,9 @@ export function Footer() {
                   </ul>
                 </div>
 
-                {/* Соцмережі */}
+                {/* Посилання на соціальні мережі */}
                 <div className="min-w-38">
-                  <h4 className="text-sm font-semibold text-[#F8F8F2] mb-4">
+                  <h4 className="mb-4 text-sm font-semibold text-sidebar-foreground">
                     Соцмережі
                   </h4>
                   <div className="flex justify-center gap-4 sm:justify-start">
@@ -98,17 +106,17 @@ export function Footer() {
                       href={siteConfig.links.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#6272A4] hover:text-[#8BE9FD] transition-colors"
+                      className="text-muted-foreground transition-colors hover:text-primary"
                     >
-                      <Github className="w-5 h-5" />
+                      <Github className="h-5 w-5" />
                     </a>
                     <a
                       href={siteConfig.links.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#6272A4] hover:text-[#8BE9FD] transition-colors"
+                      className="text-muted-foreground transition-colors hover:text-primary"
                     >
-                      <Linkedin className="w-5 h-5" />
+                      <Linkedin className="h-5 w-5" />
                     </a>
                   </div>
                 </div>
@@ -117,7 +125,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-[#44475A] mt-8 pt-8 text-center text-sm text-[#6272A4]">
+        {/* Нижня частина футера з копірайтом */}
+        <div className="mt-8 border-t border-sidebar-border pt-8 text-center text-sm text-muted-foreground">
           <p>
             © {currentYear} {siteConfig.name}. Усі права захищено.
           </p>

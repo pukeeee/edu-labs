@@ -1,6 +1,7 @@
 export const siteConfig = {
   name: "EduLabs",
-  description: "Безкоштовні практичні курси для розробників",
+  description:
+    "Здобувай затребувані навички в IT. Практичні курси для твоєї кар`єри, повністю безкоштовно. Вчися у зручному темпі.",
   url: "https://edu-labs.reznichenko.dev",
   links: {
     github: "https://github.com/pukeeee",

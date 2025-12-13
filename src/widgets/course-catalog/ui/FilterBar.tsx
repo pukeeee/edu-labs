@@ -18,6 +18,10 @@ import {
   CATEGORY_NAMES,
 } from "@/shared/config/filters";
 
+/**
+ * @property onFilterChange - Функція зворотного виклику, що викликається при зміні фільтрів.
+ * @returns {JSX.Element} - Компонент, що відображає панель фільтрів для курсів.
+ */
 interface FilterBarProps {
   onFilterChange: (filters: {
     level: Level | "all";
@@ -26,11 +30,22 @@ interface FilterBarProps {
   }) => void;
 }
 
+/**
+ * Компонент FilterBar надає користувачам можливість фільтрувати та шукати курси.
+ * Він включає поле пошуку, а також випадаючі списки для фільтрації за рівнем та категорією.
+ */
 export function FilterBar({ onFilterChange }: FilterBarProps) {
+  // Стан для зберігання поточних значень фільтрів
   const [level, setLevel] = useState<Level | "all">("all");
   const [category, setCategory] = useState<Category | "all">("all");
   const [search, setSearch] = useState("");
 
+  /**
+   * Обробляє зміни у фільтрах та викликає onFilterChange з оновленими даними.
+   * @param {Level | "all"} [newLevel] - Новий рівень складності.
+   * @param {Category | "all"} [newCategory] - Нова категорія.
+   * @param {string} [newSearch] - Новий пошуковий запит.
+   */
   const handleFilterChange = (
     newLevel?: Level | "all",
     newCategory?: Category | "all",
@@ -45,10 +60,10 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4">
-      {/* Пошук */}
+    <div className="flex flex-col gap-4 sm:flex-row">
+      {/* Поле для повнотекстового пошуку курсів */}
       <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6272A4]" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           type="search"
           placeholder="Шукати курси..."
@@ -57,13 +72,13 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
             setSearch(e.target.value);
             handleFilterChange(undefined, undefined, e.target.value);
           }}
-          className="w-full border-transparent bg-[#44475A] pl-10 text-[#F8F8F2] placeholder:text-[#6272A4] focus:ring-2 focus:ring-[#8BE9FD]"
+          className="w-full border-transparent bg-input pl-10 text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
         />
       </div>
 
-      {/* Огортка для фільтрів */}
+      {/* Контейнер для фільтрів рівня та категорії */}
       <div className="flex flex-row gap-4 sm:flex-1">
-        {/* Фільтр рівня */}
+        {/* Випадаючий список для фільтрації за рівнем складності */}
         <div className="flex-1">
           <Select
             value={level}
@@ -73,13 +88,13 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
               handleFilterChange(newLevel);
             }}
           >
-            <SelectTrigger className="w-full border-transparent bg-[#44475A] text-[#F8F8F2] focus:ring-2 focus:ring-[#8BE9FD]">
-              <Filter className="mr-2 h-4 w-4 text-[#8BE9FD]" />
+            <SelectTrigger className="w-full border-transparent bg-input text-foreground focus:ring-2 focus:ring-ring">
+              <Filter className="mr-2 h-4 w-4 text-primary" />
               <SelectValue placeholder="Рівень" />
             </SelectTrigger>
             <SelectContent
               position="popper"
-              className="border-[#6272A4] bg-[#44475A] text-[#F8F8F2]"
+              className="border-muted-foreground bg-popover text-popover-foreground"
             >
               <SelectItem value="all">Усі рівні</SelectItem>
               {LEVELS.map((levelValue) => (
@@ -91,7 +106,7 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
           </Select>
         </div>
 
-        {/* Фільтр категорії */}
+        {/* Випадаючий список для фільтрації за категорією */}
         <div className="flex-1">
           <Select
             value={category}
@@ -101,13 +116,13 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
               handleFilterChange(undefined, newCategory);
             }}
           >
-            <SelectTrigger className="w-full border-transparent bg-[#44475A] text-[#F8F8F2] focus:ring-2 focus:ring-[#8BE9FD]">
-              <LayoutGrid className="mr-2 h-4 w-4 text-[#8BE9FD]" />
+            <SelectTrigger className="w-full border-transparent bg-input text-foreground focus:ring-2 focus:ring-ring">
+              <LayoutGrid className="mr-2 h-4 w-4 text-primary" />
               <SelectValue placeholder="Категорія" />
             </SelectTrigger>
             <SelectContent
               position="popper"
-              className="border-[#6272A4] bg-[#44475A] text-[#F8F8F2]"
+              className="border-muted-foreground bg-popover text-popover-foreground"
             >
               <SelectItem value="all">Усі категорії</SelectItem>
               {CATEGORIES.map((categoryValue) => (
