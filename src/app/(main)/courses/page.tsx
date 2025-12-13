@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CourseCatalog } from "@/widgets/course-catalog/ui/CourseCatalog";
-import { featuredCourses } from "@/shared/lib/mock-courses";
+import { mockCourses } from "@/shared/lib/mock-courses";
 
 export const metadata: Metadata = {
   title: "Каталог курсів",
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 async function getCourses() {
-  return featuredCourses;
+  return mockCourses;
 }
 
 export default async function CoursesPage() {

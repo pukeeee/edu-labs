@@ -6,7 +6,8 @@ import { RoadmapList } from "@/widgets/roadmap/ui/RoadmapList";
 import { ChevronLeft } from "lucide-react";
 import { routes } from "@/shared/config/routes";
 import { Metadata } from "next";
-import { featuredCourses } from "@/shared/lib/mock-courses";
+import { mockCourses } from "@/shared/lib/mock-courses";
+import { mockUser } from "@/shared/lib/mock-user";
 import { roadmaps } from "@/shared/lib/mock-roadmap";
 
 export const metadata: Metadata = {
@@ -14,27 +15,26 @@ export const metadata: Metadata = {
 };
 
 async function getCourseRoadmap(slug: string) {
-  const course = featuredCourses.find((c) => c.slug === slug);
+  const course = mockCourses.find((c) => c.slug === slug);
   const roadmap = roadmaps.find((r) => r.courseSlug === slug);
 
   if (!course || !roadmap) {
     return null;
   }
 
-  // TODO: В майбутньому тут буде реальна логіка отримання прогресу на основі сесії користувача
-  const userProgress = {
-    "qa-fundamentals": { completedLessons: ["1", "2"], currentLesson: "3" },
-    "ai-basics": { completedLessons: ["ai-1"], currentLesson: "ai-2" },
-    "fullstack-js": {
-      completedLessons: ["fs-1", "fs-2"],
-      currentLesson: "fs-3",
-    },
-  }[slug] || { completedLessons: [], currentLesson: undefined };
+  // Отримуємо прогрес користувача з єдиного джерела
+  const userProgress = mockUser.courseProgress[slug] || {
+    completedLessonIds: [],
+    currentLessonId: undefined,
+  };
 
   return {
     course,
     modules: roadmap.modules.sort((a, b) => a.order - b.order),
-    userProgress,
+    userProgress: {
+      completedLessons: userProgress.completedLessonIds,
+      currentLesson: userProgress.currentLessonId,
+    },
   };
 }
 

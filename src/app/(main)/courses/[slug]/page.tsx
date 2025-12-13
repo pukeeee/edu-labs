@@ -10,8 +10,8 @@ import { Clock, BookOpen, Award, Share2, Play } from "lucide-react";
 import { formatTime } from "@/shared/lib/utils";
 import { routes } from "@/shared/config/routes";
 import type { Course } from "@/shared/types/common";
-import { featuredCourses } from "@/shared/lib/mock-courses";
-import { userProgress } from "@/shared/lib/mock-user";
+import { mockCourses } from "@/shared/lib/mock-courses";
+import { mockUser } from "@/shared/lib/mock-user";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -35,13 +35,37 @@ export async function generateMetadata({
 }
 
 async function getCourse(slug: string): Promise<Course | null> {
-  const course = featuredCourses.find((course) => course.slug === slug);
+  const course = mockCourses.find((course) => course.slug === slug);
   return course || null;
 }
 
-async function getUserProgress(courseId: string) {
+/**
+ * Отримує та розраховує прогрес користувача для конкретного курсу.
+ * @param slug - Слаг курсу для пошуку прогресу.
+ * @param totalLessons - Загальна кількість уроків у курсі для розрахунку відсотка.
+ * @returns Об'єкт з прогресом користувача.
+ */
+async function getUserCourseProgress(slug: string, totalLessons: number) {
   // TODO: В майбутньому тут буде реальна логіка отримання прогресу
-  return userProgress[0];
+  const courseProgressData = mockUser.courseProgress[slug];
+
+  // Якщо прогресу для цього курсу немає, повертаємо нульові значення
+  if (!courseProgressData || totalLessons === 0) {
+    return { progress: 0, completedLessons: 0, xpEarned: 0 };
+  }
+
+  const completedLessonsCount = courseProgressData.completedLessonIds.length;
+
+  // Розраховуємо відсоток проходження
+  const progressPercentage = Math.round(
+    (completedLessonsCount / totalLessons) * 100,
+  );
+
+  return {
+    progress: progressPercentage,
+    completedLessons: completedLessonsCount,
+    xpEarned: courseProgressData.xpEarned,
+  };
 }
 
 export default async function CoursePage({
@@ -56,7 +80,10 @@ export default async function CoursePage({
     notFound();
   }
 
-  const userProgress = await getUserProgress(course.id);
+  const userProgress = await getUserCourseProgress(
+    course.slug,
+    course.lessonsCount,
+  );
 
   return (
     <div className="min-h-screen">

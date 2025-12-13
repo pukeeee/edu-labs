@@ -1,4 +1,3 @@
-import { Header } from "@/widgets/header";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { siteConfig } from "@/shared/config/site";
@@ -50,8 +49,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        <Header />
-        <main className="pt-14 md:pt-16">{children}</main>
+        {children}
         <Footer />
       </body>
     </html>

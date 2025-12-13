@@ -2,10 +2,13 @@ import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { routes } from "@/shared/config/routes";
-import { featuredCourses } from "../../../shared/lib/mock-courses";
+import { mockCourses } from "../../../shared/lib/mock-courses";
 import { CourseCard } from "@/entities/course/ui/CourseCard";
 
 export default function FeaturedCourses() {
+  // Відображаємо тільки перші 3 курси як "популярні"
+  const featured = mockCourses.slice(0, 3);
+
   return (
     <section className="py-16 lg:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,7 +27,7 @@ export default function FeaturedCourses() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredCourses.map((course) => (
+          {featured.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
         </div>

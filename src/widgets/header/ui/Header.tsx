@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Code2, LayoutGrid, Menu, Search } from "lucide-react";
-
 import { ProfileButton } from "@/features/profile-button";
 import { useScrollDirection } from "@/shared/lib/hooks/use-scroll-direction";
 import { cn } from "@/shared/lib/utils";
@@ -32,7 +31,7 @@ const NavLinks = () => (
       href="/courses"
       className="text-sm font-medium text-gray-400 hover:text-primary transition-colors"
     >
-      Courses
+      Курси
     </Link>
     {/* Додайте інші посилання тут, якщо потрібно */}
   </nav>
@@ -48,7 +47,7 @@ const MobileNav = () => (
       </Button>
     </SheetTrigger>
     <SheetContent
-      side="top"
+      side="left"
       className="p-4"
       onOpenAutoFocus={(e) => e.preventDefault()}
     >
@@ -66,7 +65,7 @@ const MobileNav = () => (
             className="flex items-center gap-3 rounded-lg p-3 text-lg font-medium hover:bg-secondary transition-colors"
           >
             <LayoutGrid className="h-6 w-6 text-primary" />
-            <span>Courses</span>
+            <span>Курси</span>
           </Link>
           {/* Посилання на профіль видалено, бо воно є в кнопці аватара */}
         </nav>
@@ -109,7 +108,7 @@ export function Header() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
             <Input
               type="search"
-              placeholder="Search courses, lessons..."
+              placeholder="Шукайте курси, уроки..."
               className="pl-10"
             />
           </div>

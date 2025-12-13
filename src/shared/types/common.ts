@@ -1,5 +1,12 @@
 export type Level = "junior" | "middle" | "senior";
-export type Category = "qa" | "ai" | "fullstack" | "frontend" | "backend";
+export type Category =
+  | "qa"
+  | "ai"
+  | "fullstack"
+  | "frontend"
+  | "backend"
+  | "gamedev"
+  | "devops";
 export type LessonStatus = "locked" | "available" | "in-progress" | "completed";
 
 export interface User {
