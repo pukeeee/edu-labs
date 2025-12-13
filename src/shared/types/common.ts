@@ -1,12 +1,7 @@
-export type Level = "junior" | "middle" | "senior";
-export type Category =
-  | "qa"
-  | "ai"
-  | "fullstack"
-  | "frontend"
-  | "backend"
-  | "gamedev"
-  | "devops";
+import type { CATEGORIES, LEVELS } from "@/shared/config/filters";
+
+export type Level = (typeof LEVELS)[number];
+export type Category = (typeof CATEGORIES)[number];
 export type LessonStatus = "locked" | "available" | "in-progress" | "completed";
 
 export interface User {

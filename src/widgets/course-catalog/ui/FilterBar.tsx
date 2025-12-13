@@ -9,8 +9,14 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 import { Input } from "@/shared/ui/input";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, LayoutGrid } from "lucide-react";
 import type { Level, Category } from "@/shared/types/common";
+import {
+  LEVELS,
+  LEVEL_NAMES,
+  CATEGORIES,
+  CATEGORY_NAMES,
+} from "@/shared/config/filters";
 
 interface FilterBarProps {
   onFilterChange: (filters: {
@@ -41,8 +47,8 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
   return (
     <div className="flex flex-col sm:flex-row gap-4">
       {/* Пошук */}
-      <div className="flex-1 relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6272A4]" />
+      <div className="relative flex-1">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6272A4]" />
         <Input
           type="search"
           placeholder="Шукати курси..."
@@ -51,52 +57,68 @@ export function FilterBar({ onFilterChange }: FilterBarProps) {
             setSearch(e.target.value);
             handleFilterChange(undefined, undefined, e.target.value);
           }}
-          className="pl-10 bg-[#44475A] border-[#44475A] text-[#F8F8F2]"
+          className="w-full border-transparent bg-[#44475A] pl-10 text-[#F8F8F2] placeholder:text-[#6272A4] focus:ring-2 focus:ring-[#8BE9FD]"
         />
       </div>
 
-      {/* Фільтр рівня */}
-      <Select
-        value={level}
-        onValueChange={(value) => {
-          const newLevel = value as Level | "all";
-          setLevel(newLevel);
-          handleFilterChange(newLevel);
-        }}
-      >
-        <SelectTrigger className="w-full sm:w-45 bg-[#44475A] border-[#44475A]">
-          <Filter className="mr-2 w-4 h-4" />
-          <SelectValue placeholder="Рівень" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Усі рівні</SelectItem>
-          <SelectItem value="junior">Junior</SelectItem>
-          <SelectItem value="middle">Middle</SelectItem>
-          <SelectItem value="senior">Senior</SelectItem>
-        </SelectContent>
-      </Select>
+      {/* Огортка для фільтрів */}
+      <div className="flex flex-row gap-4 sm:flex-1">
+        {/* Фільтр рівня */}
+        <div className="flex-1">
+          <Select
+            value={level}
+            onValueChange={(value) => {
+              const newLevel = value as Level | "all";
+              setLevel(newLevel);
+              handleFilterChange(newLevel);
+            }}
+          >
+            <SelectTrigger className="w-full border-transparent bg-[#44475A] text-[#F8F8F2] focus:ring-2 focus:ring-[#8BE9FD]">
+              <Filter className="mr-2 h-4 w-4 text-[#8BE9FD]" />
+              <SelectValue placeholder="Рівень" />
+            </SelectTrigger>
+            <SelectContent
+              position="popper"
+              className="border-[#6272A4] bg-[#44475A] text-[#F8F8F2]"
+            >
+              <SelectItem value="all">Усі рівні</SelectItem>
+              {LEVELS.map((levelValue) => (
+                <SelectItem key={levelValue} value={levelValue}>
+                  {LEVEL_NAMES[levelValue]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-      {/* Фільтр категорії */}
-      <Select
-        value={category}
-        onValueChange={(value) => {
-          const newCategory = value as Category | "all";
-          setCategory(newCategory);
-          handleFilterChange(undefined, newCategory);
-        }}
-      >
-        <SelectTrigger className="w-full sm:w-45 bg-[#44475A] border-[#44475A]">
-          <SelectValue placeholder="Категорія" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Усі категорії</SelectItem>
-          <SelectItem value="qa">QA</SelectItem>
-          <SelectItem value="ai">AI</SelectItem>
-          <SelectItem value="fullstack">Fullstack</SelectItem>
-          <SelectItem value="frontend">Frontend</SelectItem>
-          <SelectItem value="backend">Backend</SelectItem>
-        </SelectContent>
-      </Select>
+        {/* Фільтр категорії */}
+        <div className="flex-1">
+          <Select
+            value={category}
+            onValueChange={(value) => {
+              const newCategory = value as Category | "all";
+              setCategory(newCategory);
+              handleFilterChange(undefined, newCategory);
+            }}
+          >
+            <SelectTrigger className="w-full border-transparent bg-[#44475A] text-[#F8F8F2] focus:ring-2 focus:ring-[#8BE9FD]">
+              <LayoutGrid className="mr-2 h-4 w-4 text-[#8BE9FD]" />
+              <SelectValue placeholder="Категорія" />
+            </SelectTrigger>
+            <SelectContent
+              position="popper"
+              className="border-[#6272A4] bg-[#44475A] text-[#F8F8F2]"
+            >
+              <SelectItem value="all">Усі категорії</SelectItem>
+              {CATEGORIES.map((categoryValue) => (
+                <SelectItem key={categoryValue} value={categoryValue}>
+                  {CATEGORY_NAMES[categoryValue]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
     </div>
   );
 }
