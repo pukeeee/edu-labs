@@ -1,7 +1,10 @@
+"use client";
+
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { routes } from "@/shared/config/routes";
+import DarkVeil from "@/shared/ui/DarkVeil";
 
 /**
  * Hero-секція (головний екран) сайту.
@@ -9,7 +12,21 @@ import { routes } from "@/shared/config/routes";
  */
 export default function HeroSection() {
   return (
-    <section className="relative bg-linear-to-b from-sidebar to-background py-20 lg:py-32">
+    <section className="relative py-20 lg:py-32">
+      {/* Анімований фон, що ігнорує `container` */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <DarkVeil
+          hueShift={290}
+          noiseIntensity={0}
+          scanlineIntensity={0}
+          scanlineFrequency={0}
+          warpAmount={0}
+          speed={1}
+        />
+        {/* Оверлей для кращої читабельності тексту */}
+        <div className="absolute inset-0 bg-linear-to-b from-background/1 to-background" />
+      </div>
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl space-y-8 text-center">
           {/* Головний заголовок з градієнтним текстом */}
