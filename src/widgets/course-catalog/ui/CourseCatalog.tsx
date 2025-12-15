@@ -1,17 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition, useRef } from "react";
 import { CourseCard } from "@/entities/course/ui/CourseCard";
 import { FilterBar } from "./FilterBar";
-import type { Course, Level, Category } from "@/shared/types/common";
+import {
+  filterCoursesAction,
+  FilterCoursesValues,
+} from "@/features/filter-courses/actions/filter-courses.action";
+import type { CourseWithDetails } from "@/shared/lib/api/course.repository";
 
-/**
- * @property courses - Масив об'єктів курсів для відображення.
- * @property userProgress - Об'єкт, що містить прогрес користувача по курсах.
- * @returns {JSX.Element} - Компонент, що відображає каталог курсів з можливістю фільтрації.
- */
 interface CourseCatalogProps {
-  courses: Course[];
+  courses: CourseWithDetails[];
   userProgress?: Record<string, { progress: number; completedLessons: number }>;
 }
 
@@ -19,45 +18,37 @@ interface CourseCatalogProps {
  * Компонент CourseCatalog відповідає за відображення списку курсів,
  * їх фільтрацію та пошук. Він використовує FilterBar для налаштування
  * критеріїв фільтрації та CourseCard для відображення кожного окремого курсу.
+ * Фільтрація виконується на сервері за допомогою Server Action.
  */
 export function CourseCatalog({ courses, userProgress }: CourseCatalogProps) {
-  // Стан для зберігання відфільтрованого списку курсів.
-  const [filteredCourses, setFilteredCourses] = useState(courses);
+  // Стан для відображення курсів. Початково - повний список.
+  const [displayedCourses, setDisplayedCourses] =
+    useState<CourseWithDetails[]>(courses);
+
+  // Хук для керування станом завантаження під час виконання Server Action
+  const [isPending, startTransition] = useTransition();
+
+  // Ref для зберігання ID таймауту для дебаунсу
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   /**
    * Обробляє зміни фільтрів, що надходять від компонента FilterBar.
-   * Фільтрує курси за рівнем, категорією та пошуковим запитом.
+   * Викликає серверний екшен для фільтрації з дебаунсом.
    * @param filters - Об'єкт з поточними налаштуваннями фільтрів.
    */
-  const handleFilterChange = (filters: {
-    level: Level | "all";
-    category: Category | "all";
-    search: string;
-  }) => {
-    let filtered = courses;
-
-    // Фільтрація за рівнем складності
-    if (filters.level !== "all") {
-      filtered = filtered.filter((c) => c.level === filters.level);
+  const handleFilterChange = (filters: FilterCoursesValues) => {
+    // Очищуємо попередній таймаут, якщо він є
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
     }
 
-    // Фільтрація за категорією
-    if (filters.category !== "all") {
-      filtered = filtered.filter((c) => c.category === filters.category);
-    }
-
-    // Пошук за назвою, описом та тегами
-    if (filters.search) {
-      const query = filters.search.toLowerCase();
-      filtered = filtered.filter(
-        (c) =>
-          c.title.toLowerCase().includes(query) ||
-          c.description.toLowerCase().includes(query) ||
-          c.tags.some((tag) => tag.toLowerCase().includes(query)),
-      );
-    }
-
-    setFilteredCourses(filtered);
+    // Встановлюємо новий таймаут
+    debounceTimeout.current = setTimeout(() => {
+      startTransition(async () => {
+        const newCourses = await filterCoursesAction(filters);
+        setDisplayedCourses(newCourses);
+      });
+    }, 300); // Затримка 300 мс
   };
 
   return (
@@ -66,24 +57,30 @@ export function CourseCatalog({ courses, userProgress }: CourseCatalogProps) {
       <FilterBar onFilterChange={handleFilterChange} />
 
       {/* Умовний рендеринг: сітка курсів або повідомлення про їх відсутність */}
-      {filteredCourses.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredCourses.map((course) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              progress={userProgress?.[course.id]?.progress}
-              completedLessons={userProgress?.[course.id]?.completedLessons}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="py-12 text-center">
-          <p className="text-lg text-muted-foreground">
-            Курси не знайдено. Спробуйте інші фільтри.
-          </p>
-        </div>
-      )}
+      <div
+        className={`transition-opacity duration-300 ${
+          isPending ? "opacity-50" : "opacity-100"
+        }`}
+      >
+        {displayedCourses.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {displayedCourses.map((course) => (
+              <CourseCard
+                key={course.id}
+                course={course}
+                progress={userProgress?.[course.id]?.progress}
+                completedLessons={userProgress?.[course.id]?.completedLessons}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="py-12 text-center">
+            <p className="text-lg text-muted-foreground">
+              Курси не знайдено. Спробуйте інші фільтри.
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

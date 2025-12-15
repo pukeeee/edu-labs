@@ -43,3 +43,4 @@ fsd.md
 system-design.md
 .geminiignore
 GEMINI.md
+src/shared/lib/supabase/seed.sql

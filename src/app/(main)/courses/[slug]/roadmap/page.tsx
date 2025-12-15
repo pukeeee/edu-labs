@@ -1,40 +1,28 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/shared/ui/button";
-import { ProgressBar } from "@/features/progress-tracking/ui/ProgressBar";
+import type { Metadata } from "next";
+
+import {
+  getCourseBySlug,
+  getCourseRoadmap,
+} from "@/shared/lib/api/course.repository";
+import { getCompletedLessons } from "@/shared/lib/api/user.repository";
+import { createClient } from "@/shared/lib/supabase/server";
+
+import { RoadmapHeader } from "@/widgets/roadmap-header/ui/RoadmapHeader";
 import { RoadmapList } from "@/widgets/roadmap/ui/RoadmapList";
-import { ChevronLeft } from "lucide-react";
-import { routes } from "@/shared/config/routes";
-import { Metadata } from "next";
-import { mockCourses } from "@/shared/lib/mock-courses";
-import { mockUser } from "@/shared/lib/mock-user";
-import { roadmaps } from "@/shared/lib/mock-roadmap";
 
-export const metadata: Metadata = {
-  title: "Роадмап курсу",
-};
+// TODO: Мова має бути динамічною
+const LANG = "uk";
 
-async function getCourseRoadmap(slug: string) {
-  const course = mockCourses.find((c) => c.slug === slug);
-  const roadmap = roadmaps.find((r) => r.courseSlug === slug);
-
-  if (!course || !roadmap) {
-    return null;
-  }
-
-  // Отримуємо прогрес користувача з єдиного джерела
-  const userProgress = mockUser.courseProgress[slug] || {
-    completedLessonIds: [],
-    currentLessonId: undefined,
-  };
-
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const course = await getCourseBySlug(slug, LANG);
   return {
-    course,
-    modules: roadmap.modules.sort((a, b) => a.order - b.order),
-    userProgress: {
-      completedLessons: userProgress.completedLessonIds,
-      currentLesson: userProgress.currentLessonId,
-    },
+    title: `Роадмап: ${course?.title || "Курс не знайдено"}`,
   };
 }
 
@@ -44,61 +32,42 @@ export default async function RoadmapPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const data = await getCourseRoadmap(slug);
 
-  if (!data) {
+  // 1. Отримуємо дані курсу та користувача
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const [course, modules] = await Promise.all([
+    getCourseBySlug(slug, LANG),
+    getCourseRoadmap(slug, LANG),
+  ]);
+
+  if (!course) {
     notFound();
   }
 
-  const { course, modules, userProgress } = data;
-  const completedCount = userProgress.completedLessons.length;
+  // 2. Отримуємо прогрес тільки для авторизованих користувачів
+  const completedLessons = user
+    ? await getCompletedLessons(course.id, user.id)
+    : [];
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="max-w-4xl mx-auto space-y-8">
-        {/* Breadcrumbs */}
-        <div className="flex items-center gap-2 text-sm text-[#6272A4]">
-          <Link href={routes.courses} className="hover:text-[#8BE9FD]">
-            Курси
-          </Link>
-          <span>/</span>
-          <Link
-            href={routes.course(course.slug)}
-            className="hover:text-[#8BE9FD]"
-          >
-            {course.title}
-          </Link>
-          <span>/</span>
-          <span className="text-[#F8F8F2]">Роадмап</span>
-        </div>
+    <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl space-y-8">
+        <RoadmapHeader
+          course={course}
+          completedCount={completedLessons.length}
+        />
 
-        {/* Header */}
-        <div className="space-y-4">
-          <Button asChild variant="ghost" className="text-[#8BE9FD] -ml-4">
-            <Link href={routes.course(course.slug)}>
-              <ChevronLeft className="mr-2 w-4 h-4" />
-              Назад до курсу
-            </Link>
-          </Button>
-
-          <h1 className="text-4xl font-bold text-[#F8F8F2]">
-            Роадмап: {course.title}
-          </h1>
-
-          {/* Глобальний прогрес */}
-          <ProgressBar
-            current={completedCount}
-            total={course.lessonsCount}
-            showLabel
-          />
-        </div>
-
-        {/* Roadmap List */}
         <RoadmapList
           modules={modules}
           courseSlug={course.slug}
-          completedLessons={userProgress.completedLessons}
-          currentLesson={userProgress.currentLesson}
+          completedLessons={completedLessons}
+          isAuthenticated={!!user}
+          // TODO: Реалізувати логіку поточного уроку
+          currentLesson={undefined}
         />
       </div>
     </div>

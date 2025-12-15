@@ -7,26 +7,36 @@ export default function CoursesLoading() {
       <div className="space-y-8">
         {/* Header skeleton */}
         <div className="space-y-4">
-          <Skeleton className="h-10 w-64" />
-          <Skeleton className="h-6 w-96" />
+          <Skeleton className="h-10 w-1/2 md:w-1/3" />
+          <Skeleton className="h-6 w-3/4 md:w-1/2" />
         </div>
 
         {/* Filters skeleton */}
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row">
           <Skeleton className="h-10 flex-1" />
-          <Skeleton className="h-10 w-45" />
-          <Skeleton className="h-10 w-45" />
+          <div className="flex flex-1 gap-4">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
         </div>
 
         {/* Cards skeleton */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i} className="bg-[#44475A] border-[#44475A]">
-              <div className="p-6 space-y-4">
+            <Card key={i} className="border-card bg-card">
+              <div className="space-y-4 p-6">
                 <Skeleton className="aspect-video w-full" />
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-2/3" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-5/6" />
+                </div>
+                {/* Metrics skeleton */}
+                <div className="flex justify-between">
+                  <Skeleton className="h-4 w-1/4" />
+                  <Skeleton className="h-4 w-1/4" />
+                  <Skeleton className="h-4 w-1/4" />
+                </div>
                 <Skeleton className="h-10 w-full" />
               </div>
             </Card>

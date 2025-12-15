@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { LessonCard } from "@/entities/lesson/ui/LessonCard";
-import type { Lesson, LessonStatus } from "@/shared/types/common";
+import { LessonCard } from '@/entities/lesson/ui/LessonCard';
+import type { Lesson, LessonStatus } from '@/shared/types/common';
 
 interface RoadmapModule {
   id: string;
@@ -13,6 +13,7 @@ interface RoadmapListProps {
   modules: RoadmapModule[];
   courseSlug: string;
   completedLessons: string[];
+  isAuthenticated: boolean; // Додаємо проп для статусу авторизації
   currentLesson?: string;
 }
 
@@ -20,24 +21,31 @@ export function RoadmapList({
   modules,
   courseSlug,
   completedLessons,
+  isAuthenticated,
   currentLesson,
 }: RoadmapListProps) {
   // Визначає статус уроку
   const getLessonStatus = (lesson: Lesson, index: number): LessonStatus => {
+    // Якщо користувач не авторизований, всі уроки заблоковані
+    if (!isAuthenticated) {
+      return 'locked';
+    }
+
     if (completedLessons.includes(lesson.id)) {
-      return "completed";
+      return 'completed';
     }
     if (lesson.id === currentLesson) {
-      return "in-progress";
+      return 'in-progress';
     }
     // Урок доступний якщо попередній завершений або це перший урок
+    // TODO: Ця логіка може бути неточною для кількох модулів і потребуватиме доопрацювання
     if (
       index === 0 ||
       completedLessons.includes(modules[0].lessons[index - 1]?.id)
     ) {
-      return "available";
+      return 'available';
     }
-    return "locked";
+    return 'locked';
   };
 
   return (
@@ -46,16 +54,16 @@ export function RoadmapList({
         <div key={module.id} className="space-y-4">
           {/* Заголовок модуля */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#BD93F9]/10 border border-[#BD93F9]/20 text-[#BD93F9] font-bold text-sm">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-purple/20 bg-purple/10 text-sm font-bold text-purple">
               {moduleIndex + 1}
             </div>
-            <h2 className="text-2xl font-bold text-[#F8F8F2]">
+            <h2 className="text-2xl font-bold text-foreground">
               {module.title}
             </h2>
           </div>
 
           {/* Уроки модуля */}
-          <div className="space-y-3 pl-5 border-l-2 border-[#44475A]">
+          <div className="space-y-3 border-l-2 border-border pl-5">
             {module.lessons.map((lesson, lessonIndex) => (
               <LessonCard
                 key={lesson.id}

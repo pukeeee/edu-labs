@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import type { Course } from "@/shared/types/common";
+import type { CourseWithDetails } from "@/shared/lib/api/course.repository";
 import { Card, CardContent, CardFooter, CardHeader } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Progress } from "@/shared/ui/progress";
@@ -12,7 +12,7 @@ import { routes } from "@/shared/config/routes";
 import { CourseBadge } from "./CourseBadge";
 
 interface CourseCardProps {
-  course: Course;
+  course: CourseWithDetails;
   progress?: number;
   completedLessons?: number;
 }
@@ -29,10 +29,10 @@ export function CourseCard({
       {/* Thumbnail */}
       <div className="relative aspect-video w-full overflow-hidden">
         <Image
-          src={course.thumbnail}
+          src={course.thumbnail_url || "/window.svg"}
           alt={course.title}
           fill
-          className="object-cover transition-transform group-hover:scale-105"
+          className="object-cover transition-transform "
           unoptimized
         />
         <div className="absolute inset-0 bg-linear-to-t from-[#44475A] to-transparent" />
@@ -57,15 +57,15 @@ export function CourseCard({
         <div className="flex items-center gap-4 text-sm text-[#6272A4]">
           <div className="flex items-center gap-1">
             <BookOpen className="w-4 h-4" />
-            <span>{course.lessonsCount} уроків</span>
+            <span>{course.lessons_count} уроків</span>
           </div>
           <div className="flex items-center gap-1">
             <Clock className="w-4 h-4" />
-            <span>{formatTime(course.estimatedTime)}</span>
+            <span>{formatTime(course.estimated_time)}</span>
           </div>
           <div className="flex items-center gap-1">
             <Award className="w-4 h-4" />
-            <span>{course.totalXP} XP</span>
+            <span>{course.total_xp} XP</span>
           </div>
         </div>
 
@@ -74,7 +74,7 @@ export function CourseCard({
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="text-[#6272A4]">
-                {completedLessons}/{course.lessonsCount} уроків
+                {completedLessons}/{course.lessons_count} уроків
               </span>
               <span className="text-[#50FA7B] font-medium">{progress}%</span>
             </div>

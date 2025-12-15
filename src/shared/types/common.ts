@@ -27,6 +27,10 @@ export interface Course {
   tags: string[];
   published: boolean;
   lessonsCount: number;
+  authorName?: string;
+  authorAvatar?: string;
+  reviewsCount?: number;
+  avgRating?: number;
 }
 
 export interface Lesson {
