@@ -13,6 +13,8 @@ export function AuthButton() {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
+        // Після успішного входу в Google, користувач буде перенаправлений
+        // на цей URL, де ми завершимо процес автентифікації на стороні сервера.
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });

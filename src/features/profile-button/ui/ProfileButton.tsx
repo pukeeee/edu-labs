@@ -27,9 +27,11 @@ type ProfileButtonProps = {
  */
 export function ProfileButton({ user }: ProfileButtonProps) {
   const { signOut } = useSessionStore();
+  // Отримуємо метадані користувача. Якщо їх немає, використовуємо значення за замовчуванням.
   const userName = user.user_metadata?.full_name || "Користувач";
   const userEmail = user.email || "Пошта не вказана";
   const userAvatar = user.user_metadata?.avatar_url;
+  // Створюємо ініціали з імені для аватарки-заглушки.
   const userInitials = userName
     .split(" ")
     .map((n: string) => n[0])

@@ -8,7 +8,7 @@ import {
   DialogDescription,
 } from "@/shared/ui/dialog";
 import { useAuthModalStore } from "../model/auth-modal.store";
-import { AuthButton } from "./AuthButton"; // I will reuse the button I created earlier
+import { AuthButton } from "./AuthButton";
 
 /**
  * Модальне вікно для автентифікації.
