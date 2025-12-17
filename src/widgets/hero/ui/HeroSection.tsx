@@ -5,84 +5,97 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { routes } from "@/shared/config/routes";
 import DarkVeil from "@/shared/ui/DarkVeil";
+import { AuthModal, useAuth } from "@/features/auth";
 
 /**
  * Hero-секція (головний екран) сайту.
  * Містить основний заклик до дії, ключові переваги та навігаційні кнопки.
  */
 export default function HeroSection() {
+  const { withAuthCheck } = useAuth();
+
+  const handleLogin = () => {
+    // Порожня функція, оскільки useAuth відкриє модальне вікно,
+    // якщо користувач не автентифікований.
+  };
+
   return (
-    <section className="relative py-20 lg:py-32">
-      {/* Анімований фон, що ігнорує `container` */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <DarkVeil
-          hueShift={290}
-          noiseIntensity={0}
-          scanlineIntensity={0}
-          scanlineFrequency={0}
-          warpAmount={0}
-          speed={1}
-        />
-        {/* Оверлей для кращої читабельності тексту */}
-        <div className="absolute inset-0 bg-linear-to-b from-background/1 to-background" />
-      </div>
+    <>
+      <AuthModal />
+      <section className="relative py-20 lg:py-32">
+        {/* Анімований фон, що ігнорує `container` */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <DarkVeil
+            hueShift={290}
+            noiseIntensity={0}
+            scanlineIntensity={0}
+            scanlineFrequency={0}
+            warpAmount={0}
+            speed={1}
+          />
+          {/* Оверлей для кращої читабельності тексту */}
+          <div className="absolute inset-0 bg-linear-to-b from-background/1 to-background" />
+        </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl space-y-8 text-center">
-          {/* Головний заголовок з градієнтним текстом */}
-          <h1 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
-            <span className="bg-linear-to-r from-primary to-purple bg-clip-text text-transparent">
-              Освоюй QA, AI та Fullstack, та багато іншого
-            </span>
-          </h1>
-
-          {/* Підзаголовок з описом */}
-          <p className="mx-auto max-w-2xl text-xl text-muted-foreground sm:text-2xl">
-            Здобувай затребувані навички в IT. Практичні курси для твоєї
-            кар&apos;єри, повністю безкоштовно. Вчися у зручному темпі.
-          </p>
-
-          {/* Кнопки із закликом до дії */}
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button
-              asChild
-              size="lg"
-              className="bg-pink font-semibold text-pink-foreground hover:bg-pink/90"
-            >
-              <Link href={routes.courses}>
-                Переглянути курси
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary/10"
-            >
-              <Link href="/login">Увійти</Link>
-            </Button>
-          </div>
-
-          {/* Блок з ключовими метриками */}
-          <div className="flex flex-wrap justify-center gap-8 pt-8 text-sm text-muted-foreground">
-            <div>
-              <span className="block text-2xl font-bold text-primary">12</span>
-              <span>курсів</span>
-            </div>
-            <div>
-              <span className="block text-2xl font-bold text-purple">240+</span>
-              <span>уроків</span>
-            </div>
-            <div>
-              <span className="block text-2xl font-bold text-success">
-                100%
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl space-y-8 text-center">
+            {/* Головний заголовок з градієнтним текстом */}
+            <h1 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+              <span className="bg-linear-to-r from-primary to-purple bg-clip-text text-transparent">
+                Освоюй QA, AI та Fullstack, та багато іншого
               </span>
-              <span>безкоштовно</span>
+            </h1>
+
+            {/* Підзаголовок з описом */}
+            <p className="mx-auto max-w-2xl text-xl text-muted-foreground sm:text-2xl">
+              Здобувай затребувані навички в IT. Практичні курси для твоєї
+              кар&apos;єри, повністю безкоштовно. Вчися у зручному темпі.
+            </p>
+
+            {/* Кнопки із закликом до дії */}
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Button
+                asChild
+                size="lg"
+                className="bg-pink font-semibold text-pink-foreground hover:bg-pink/90"
+              >
+                <Link href={routes.courses}>
+                  Переглянути курси
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+              <Button
+                onClick={withAuthCheck(handleLogin)}
+                size="lg"
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary/10"
+              >
+                Увійти
+              </Button>
+            </div>
+
+            {/* Блок з ключовими метриками */}
+            <div className="flex flex-wrap justify-center gap-8 pt-8 text-sm text-muted-foreground">
+              <div>
+                <span className="block text-2xl font-bold text-primary">12</span>
+                <span>курсів</span>
+              </div>
+              <div>
+                <span className="block text-2xl font-bold text-purple">
+                  240+
+                </span>
+                <span>уроків</span>
+              </div>
+              <div>
+                <span className="block text-2xl font-bold text-success">
+                  100%
+                </span>
+                <span>безкоштовно</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
