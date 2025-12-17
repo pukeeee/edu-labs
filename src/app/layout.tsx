@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { siteConfig } from "@/shared/config/site";
 import "./globals.css";
+import { AuthProvider } from "./providers/auth-provider";
 import { Footer } from "@/widgets/footer/ui/Footer";
 
 const inter = Inter({
@@ -49,7 +50,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
         <Footer />
       </body>
     </html>
