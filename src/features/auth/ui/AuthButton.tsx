@@ -11,6 +11,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { usePathname } from "next/navigation";
 import { createClient } from "@/shared/lib/supabase/client";
 import { Button } from "@/shared/ui/button";
 import { Loader2 } from "lucide-react";
@@ -58,6 +59,9 @@ export function AuthButton() {
   // Стан помилки
   const [error, setError] = useState<AuthError | null>(null);
 
+  // Отримуємо поточний шлях
+  const pathname = usePathname();
+
   // Мемоізуємо клієнт (створюється один раз)
   const supabase = useMemo(() => createClient(), []);
 
@@ -79,9 +83,9 @@ export function AuthButton() {
         options: {
           // Після успішного входу в Google, користувач буде перенаправлений
           // на цей URL, де ми завершимо процес автентифікації на стороні сервера
-          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(
-            window.location.pathname,
-          )}`,
+          redirectTo: `${
+            window.location.origin
+          }/auth/callback?next=${encodeURIComponent(pathname)}`,
         },
       });
 

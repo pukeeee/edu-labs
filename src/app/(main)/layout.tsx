@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import { Header } from "@/widgets/header/ui/Header";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 export default function MainLayout({
   children,
@@ -7,7 +9,9 @@ export default function MainLayout({
 }) {
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
+      <Suspense fallback={<Skeleton className="h-14 md:h-16 w-full" />}>
+        <Header />
+      </Suspense>
       <main className="flex-1 pt-14 md:pt-16">{children}</main>
     </div>
   );

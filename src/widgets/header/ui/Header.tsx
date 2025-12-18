@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { Code2, LayoutGrid, Menu, Search, LogIn } from "lucide-react";
 
@@ -164,7 +165,9 @@ export function Header() {
               <Search className="h-6 w-6" />
               <span className="sr-only">Пошук</span>
             </Button>
-            <AuthController />
+            <Suspense fallback={<Skeleton className="h-8 w-8 rounded-full" />}>
+              <AuthController />
+            </Suspense>
           </div>
         </div>
       </header>

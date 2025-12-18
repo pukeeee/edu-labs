@@ -4,6 +4,8 @@ import { siteConfig } from "@/shared/config/site";
 import "./globals.css";
 import { AuthProvider } from "./providers/auth-provider";
 import { Footer } from "@/widgets/footer/ui/Footer";
+import { Suspense } from "react";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -50,7 +52,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        <AuthProvider>{children}</AuthProvider>
+        <Suspense fallback={<Skeleton className="h-full w-full" />}>
+          <AuthProvider>{children}</AuthProvider>
+        </Suspense>
         <Footer />
       </body>
     </html>
