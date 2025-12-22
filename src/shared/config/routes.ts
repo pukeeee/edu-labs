@@ -5,5 +5,5 @@ export const routes = {
   courseRoadmap: (slug: string) => `/courses/${slug}/roadmap`,
   lesson: (courseSlug: string, lessonSlug: string) =>
     `/courses/${courseSlug}/lessons/${lessonSlug}`,
-  profile: "/profile",
+  profile: "/dashboard",
 } as const;

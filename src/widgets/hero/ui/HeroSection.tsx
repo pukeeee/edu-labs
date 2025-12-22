@@ -12,7 +12,7 @@ import { AuthModal, useAuth } from "@/features/auth";
  * Містить основний заклик до дії, ключові переваги та навігаційні кнопки.
  */
 export default function HeroSection() {
-  const { withAuthCheck } = useAuth();
+  const { withAuthCheck, isAuthenticated } = useAuth();
 
   const handleLogin = () => {
     // Порожня функція, оскільки useAuth відкриє модальне вікно,
@@ -64,14 +64,25 @@ export default function HeroSection() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button
-                onClick={withAuthCheck(handleLogin)}
-                size="lg"
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary/10"
-              >
-                Увійти
-              </Button>
+              {isAuthenticated ? (
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/10"
+                >
+                  <Link href={routes.profile}>Мій кабінет</Link>
+                </Button>
+              ) : (
+                <Button
+                  onClick={withAuthCheck(handleLogin)}
+                  size="lg"
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary/10"
+                >
+                  Увійти
+                </Button>
+              )}
             </div>
 
             {/* Блок з ключовими метриками */}

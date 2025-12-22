@@ -10,7 +10,7 @@ import { AuthModal, useAuth } from "@/features/auth";
  * зареєструватися або перейти до каталогу курсів.
  */
 export default function CTASection() {
-  const { withAuthCheck } = useAuth();
+  const { withAuthCheck, isAuthenticated } = useAuth();
 
   const handleLogin = () => {
     // Порожня функція, оскільки useAuth відкриє модальне вікно,
@@ -33,13 +33,23 @@ export default function CTASection() {
             {/* Контейнер для кнопок */}
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               {/* Основна кнопка для входу */}
-              <Button
-                onClick={withAuthCheck(handleLogin)}
-                size="lg"
-                className="bg-success text-success-foreground hover:bg-success/90"
-              >
-                Увійти через Google
-              </Button>
+              {isAuthenticated ? (
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-success text-success-foreground hover:bg-success/90"
+                >
+                  <Link href={routes.profile}>Перейти в кабінет</Link>
+                </Button>
+              ) : (
+                <Button
+                  onClick={withAuthCheck(handleLogin)}
+                  size="lg"
+                  className="bg-success text-success-foreground hover:bg-success/90"
+                >
+                  Увійти через Google
+                </Button>
+              )}
               {/* Другорядна кнопка для перегляду курсів */}
               <Button
                 asChild
