@@ -79,7 +79,7 @@ interface AuthModalProps {
 
 /**
  * Модальне вікно для автентифікації через Google.
- * 
+ *
  * Features:
  * - Інформативний контент про переваги входу
  * - Візуальні елементи для кращого UX
@@ -90,7 +90,7 @@ interface AuthModalProps {
  * ```tsx
  * // У будь-якому компоненті
  * import { AuthModal } from '@/features/auth';
- * 
+ *
  * export function MyComponent() {
  *   return (
  *     <>
@@ -151,7 +151,7 @@ export function AuthModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-[480px] gap-6">
+      <DialogContent className="sm:max-w-120 gap-6">
         {/* Header з іконкою */}
         <DialogHeader className="space-y-3">
           {/* Іконка-індикатор */}
@@ -179,7 +179,7 @@ export function AuthModal({
 
           {/* Privacy disclaimer */}
           <p className="text-center text-xs text-muted-foreground">
-            Натискаючи "Увійти через Google", ви погоджуєтесь з нашими{" "}
+            Натискаючи &quot;Увійти через Google&quot;, ви погоджуєтесь з нашими{" "}
             <a
               href="/privacy"
               className="underline hover:text-foreground transition-colors"
@@ -214,7 +214,7 @@ export function AuthModal({
                       animationFillMode: "backwards",
                     }}
                   >
-                    <div className="flex-shrink-0 mt-0.5">
+                    <div className="shrink-0 mt-0.5">
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-success/10">
                         <Icon
                           className="h-4 w-4 text-success"

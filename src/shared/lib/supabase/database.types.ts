@@ -148,7 +148,6 @@ export interface Database {
           status: Database["public"]["Enums"]["course_status"]
           tags: string[] | null
           thumbnail_url: string | null
-          title: string
           total_xp: number
           updated_at: string
         }
@@ -166,7 +165,6 @@ export interface Database {
           status?: Database["public"]["Enums"]["course_status"]
           tags?: string[] | null
           thumbnail_url?: string | null
-          title: string
           total_xp?: number
           updated_at?: string
         }
@@ -184,7 +182,6 @@ export interface Database {
           status?: Database["public"]["Enums"]["course_status"]
           tags?: string[] | null
           thumbnail_url?: string | null
-          title?: string
           total_xp?: number
           updated_at?: string
         }

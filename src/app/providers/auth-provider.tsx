@@ -23,6 +23,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 // ТИПИ
 // ============================================================================
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type AuthEventType =
   | "SIGNED_IN"
   | "SIGNED_OUT"

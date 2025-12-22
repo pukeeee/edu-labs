@@ -109,7 +109,8 @@ const supabase = createClient();
  * }
  * ```
  */
-export const useSessionStore = create<SessionState>((set, get) => ({
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const useSessionStore = create<SessionState>((set, _get) => ({
   // Початковий стан
   session: null,
   user: null,

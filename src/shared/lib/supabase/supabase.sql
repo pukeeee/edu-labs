@@ -1,5 +1,5 @@
 -- ============================================================================
--- SUPABASE DATABASE SCHEMA (v2.1 - Fully Commented)
+-- SUPABASE DATABASE SCHEMA
 --
 -- Остання ревізія: 2025-12-15
 --

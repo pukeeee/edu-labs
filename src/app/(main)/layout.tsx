@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Header } from "@/widgets/header/ui/Header";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { Footer } from "@/widgets/footer/ui/Footer";
 
 export default function MainLayout({
   children,
@@ -13,6 +14,7 @@ export default function MainLayout({
         <Header />
       </Suspense>
       <main className="flex-1 pt-14 md:pt-16">{children}</main>
+      <Footer />
     </div>
   );
 }
