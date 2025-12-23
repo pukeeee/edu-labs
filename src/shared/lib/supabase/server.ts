@@ -177,9 +177,9 @@ export async function isAuthenticated(): Promise<boolean> {
   try {
     const supabase = await createClient();
     const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    return !!session;
+      data: { user },
+    } = await supabase.auth.getUser();
+    return !!user;
   } catch {
     return false;
   }

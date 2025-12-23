@@ -151,9 +151,9 @@ export function AuthModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-120 gap-6">
+      <DialogContent className="sm:max-w-120 flex flex-col max-h-[95dvh] gap-0">
         {/* Header з іконкою */}
-        <DialogHeader className="space-y-3">
+        <DialogHeader className="shrink-0 py-6 pb-4">
           {/* Іконка-індикатор */}
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 border-2 border-primary/20">
             <Lock className="h-6 w-6 text-primary" aria-hidden="true" />
@@ -168,8 +168,8 @@ export function AuthModal({
           </DialogDescription>
         </DialogHeader>
 
-        {/* Auth Button */}
-        <div className="space-y-4">
+        {/* Auth Button (fixed) */}
+        <div className="space-y-4 px-6 pb-4 shrink-0">
           <AuthButton
             onSuccess={handleSuccess}
             variant="default"
@@ -192,9 +192,9 @@ export function AuthModal({
           </p>
         </div>
 
-        {/* Benefits List */}
+        {/* Benefits List (scrollable) */}
         {showBenefits && (
-          <div className="space-y-3 pt-2 border-t">
+          <div className="grow overflow-y-auto space-y-3 pt-2 border-t px-6 -mx-6 pb-4">
             <p className="text-sm font-medium text-foreground/80 text-center">
               Після входу ви отримаєте:
             </p>
@@ -237,8 +237,8 @@ export function AuthModal({
           </div>
         )}
 
-        {/* Optional: Continue without auth */}
-        <div className="text-center border-t pt-4">
+        {/* Optional: Continue without auth (fixed) */}
+        <div className="text-center border-t pt-1 shrink-0">
           <button
             onClick={close}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors underline-offset-4 hover:underline"

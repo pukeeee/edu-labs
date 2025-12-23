@@ -22,9 +22,13 @@ import { NextResponse, type NextRequest } from "next/server";
  * з параметром для відкриття модального вікна входу.
  */
 const PROTECTED_ROUTES = [
-  "/profile",
-  "/profile/achievements",
   "/dashboard",
+  "/dashboard/courses",
+  "/dashboard/achievements",
+  "/dashboard/stats",
+  "/dashboard/favorites",
+  "/dashboard/profile",
+  "/dashboard/settings",
 ] as const;
 
 /**
@@ -42,26 +46,34 @@ const PUBLIC_ROUTES = [
   "/courses",
   "/auth/callback",
   "/auth/error",
-  "/api",
-  "/_next",
-  "/favicon.ico",
 ] as const;
 
 // ============================================================================
 // УТИЛІТИ
 // ============================================================================
-
 /**
- * Перевіряє, чи шлях відповідає одному з паттернів.
+ * Перевіряє, чи шлях відповідає одному з захищених роутів.
+ * Використовує точне співпадіння та перевірку префікса для вкладених роутів.
  */
-function matchesRoute(pathname: string, routes: readonly string[]): boolean {
-  return routes.some((route) => {
+function isProtectedRoute(pathname: string): boolean {
+  return PROTECTED_ROUTES.some((route) => {
     // Точне співпадіння
     if (pathname === route) return true;
 
-    // Співпадіння початку шляху (для вкладених роутів)
+    // Вкладені роути (напр., /dashboard/courses/123)
     if (pathname.startsWith(`${route}/`)) return true;
 
+    return false;
+  });
+}
+
+/**
+ * Перевіряє, чи шлях є публічним роутом.
+ */
+function isPublicRoute(pathname: string): boolean {
+  return PUBLIC_ROUTES.some((route) => {
+    if (pathname === route) return true;
+    if (pathname.startsWith(`${route}/`)) return true;
     return false;
   });
 }
@@ -86,7 +98,7 @@ export async function middleware(request: NextRequest) {
   // =========================================================================
   // Крок 1: Пропускаємо публічні роути
   // =========================================================================
-  if (matchesRoute(pathname, PUBLIC_ROUTES)) {
+  if (isPublicRoute(pathname)) {
     return NextResponse.next();
   }
 
@@ -121,15 +133,15 @@ export async function middleware(request: NextRequest) {
   // Крок 3: Перевіряємо auth стан (автоматично обробляє refresh token)
   // =========================================================================
   const {
-    data: { session },
+    data: { user },
     error,
-  } = await supabase.auth.getSession();
+  } = await supabase.auth.getUser();
 
   if (error) {
     console.error("[Middleware] Auth error:", error);
   }
 
-  const isAuthenticated = !!session;
+  const isAuthenticated = !!user;
 
   // =========================================================================
   // Крок 4: Застосовуємо правила доступу
@@ -137,10 +149,19 @@ export async function middleware(request: NextRequest) {
 
   // Захищені роути: якщо користувач не авторизований, редірект на головну
   // з параметрами, щоб ініціювати відкриття модального вікна авторизації.
-  if (matchesRoute(pathname, PROTECTED_ROUTES) && !isAuthenticated) {
+  if (isProtectedRoute(pathname) && !isAuthenticated) {
     const homeUrl = new URL("/", request.url);
     homeUrl.searchParams.set("require_auth", "true");
     homeUrl.searchParams.set("next", pathname);
+
+    // Логування в development
+    if (process.env.NODE_ENV === "development") {
+      console.log("[Middleware] Unauthorized access blocked:", {
+        pathname,
+        redirectTo: homeUrl.toString(),
+      });
+    }
+
     return NextResponse.redirect(homeUrl);
   }
 
@@ -158,6 +179,10 @@ export async function middleware(request: NextRequest) {
       isAuthenticated ? "true" : "false",
     );
     response.headers.set("x-middleware-pathname", pathname);
+    response.headers.set(
+      "x-middleware-user-id",
+      user?.id || "anonymous",
+    );
   }
 
   return response;

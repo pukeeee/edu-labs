@@ -16,6 +16,7 @@ import {
 import { useSessionStore } from "@/entities/session/model/session.store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Button } from "@/shared/ui/button";
+import { routes } from "@/shared/config/routes";
 
 type ProfileButtonProps = {
   user: User;
@@ -59,7 +60,7 @@ export function ProfileButton({ user }: ProfileButtonProps) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/profile">
+            <Link href={routes.dashboard}>
               <UserIcon className="mr-2 h-4 w-4" />
               <span>Профіль</span>
             </Link>
@@ -80,4 +81,3 @@ export function ProfileButton({ user }: ProfileButtonProps) {
     </DropdownMenu>
   );
 }
-
